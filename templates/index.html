@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhishGuard — AI URL Threat Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="scanline"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">◈</span>
+    <span class="brand-name">PhishGuard</span>
+  </div>
+  <div class="brand-sub">AI-based URL threat scanner &mdash; prototype</div>
+</header>
+
+<main class="wrap">
+
+  <section class="scan-panel">
+    <label class="scan-label" for="url-input">enter a url to analyze</label>
+    <div class="scan-row">
+      <span class="prompt-caret">&gt;</span>
+      <input id="url-input" type="text" placeholder="e.g. http://secure-paypal-login.tk/confirm"
+             autocomplete="off" spellcheck="false">
+      <button id="scan-btn">Scan</button>
+    </div>
+    <div class="sample-row">
+      Try:
+      <button class="sample-chip" data-url="https://github.com/anthropics">github.com/anthropics</button>
+      <button class="sample-chip" data-url="http://192.168.4.12/secure-login/verify-account">a raw-IP login link</button>
+      <button class="sample-chip" data-url="https://paypal-verify-account.tk/confirm?user=1">a fake PayPal link</button>
+    </div>
+  </section>
+
+  <section id="result" class="result-panel hidden">
+    <div class="verdict-row">
+      <div class="verdict-badge" id="verdict-badge">
+        <span id="verdict-icon">?</span>
+      </div>
+      <div class="verdict-text">
+        <div class="verdict-label" id="verdict-label">&nbsp;</div>
+        <div class="verdict-url" id="verdict-url">&nbsp;</div>
+      </div>
+      <div class="confidence-block">
+        <div class="confidence-num" id="confidence-num">--%</div>
+        <div class="confidence-cap">confidence</div>
+      </div>
+    </div>
+
+    <div class="gauge-track">
+      <div class="gauge-fill" id="gauge-fill"></div>
+    </div>
+    <div class="gauge-labels">
+      <span>legitimate</span>
+      <span>phishing</span>
+    </div>
+
+    <div class="signals-block">
+      <div class="signals-title">Signals detected</div>
+      <ul class="signals-list" id="signals-list"></ul>
+    </div>
+
+    <details class="feature-details">
+      <summary>Raw extracted features (model input)</summary>
+      <div class="feature-grid" id="feature-grid"></div>
+    </details>
+  </section>
+
+  <section class="error-panel hidden" id="error-panel"></section>
+
+  <footer class="foot-note">
+    Trained on a locally generated synthetic dataset &middot; RandomForest classifier &middot; 19 lexical/structural URL features &middot; runs fully offline, no data leaves this machine
+  </footer>
+
+</main>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
