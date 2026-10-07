@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PhishGuard – AI URL threat scanner</title>
+  <title>PhishGuard – Check a link before you click</title>
+  <meta name="description" content="Paste any link and PhishGuard's AI checks 19 warning signs to tell you if it looks like phishing.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,148 +14,153 @@
 <body>
   <div class="scanline"></div>
 
-  <header class="topbar">
-    <div class="brand">
-      <span class="brand-mark">◈</span>
-      <span class="brand-name">PhishGuard</span>
+  <header class="site-nav">
+    <div class="nav-inner">
+      <a class="brand" href="#home"><span class="brand-mark">◈</span><span class="brand-name">PhishGuard</span></a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="#how">How it works</a>
+        <a href="#about">About</a>
+        <a href="#tips">Red flags</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="nav-cta" href="#scan">Scan a link</a>
     </div>
-    <span class="brand-sub">AI-based URL threat scanner — prototype</span>
-    <nav class="nav" aria-label="Main">
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#how">How it works</a>
-      <a href="#faq">FAQ</a>
-      <a href="#contact">Contact</a>
-    </nav>
   </header>
 
-  <main class="wrap">
+  <main>
+    <!-- HERO + SCANNER -->
+    <section id="home" class="hero container">
+      <span class="pill"><i></i> AI link scanner · prototype</span>
+      <h1>Know if a link is a <span class="grad">trap</span> before you click it.</h1>
+      <p class="lead">Paste any web address and PhishGuard checks 19 warning signs in under a second. It only reads the link text and never opens the page.</p>
 
-    <!-- HOME: the scanner -->
-    <section id="home" class="section">
-      <div class="scan-panel">
-        <label class="scan-label" for="url-input">enter a url to analyze</label>
-        <div class="scan-row">
-          <span class="prompt-caret">&gt;</span>
-          <input id="url-input" type="text" placeholder="https://example.com/login" autocomplete="off" spellcheck="false">
-          <button id="scan-btn" type="button">Scan</button>
+      <div class="hero-card" id="scan">
+        <div class="scan-panel">
+          <label class="scan-label" for="url-input">enter a url to analyze</label>
+          <div class="scan-row">
+            <span class="prompt-caret">&gt;</span>
+            <input id="url-input" type="text" placeholder="https://example.com/login" autocomplete="off" spellcheck="false">
+            <button id="scan-btn" type="button">Scan</button>
+          </div>
+          <div class="sample-row">
+            <span>Try:</span>
+            <button type="button" class="sample-chip" data-url="https://github.com/anthropics">github.com/anthropics</button>
+            <button type="button" class="sample-chip" data-url="http://192.168.45.12/secure/login.php?verify=account">a raw-IP login link</button>
+            <button type="button" class="sample-chip" data-url="http://paypal-secure-login.verify-account.xyz/update">a fake PayPal link</button>
+          </div>
         </div>
-        <div class="sample-row">
-          <span>Try:</span>
-          <button type="button" class="sample-chip" data-url="https://github.com/anthropics">github.com/anthropics</button>
-          <button type="button" class="sample-chip" data-url="http://192.168.45.12/secure/login.php?verify=account">a raw-IP login link</button>
-          <button type="button" class="sample-chip" data-url="http://paypal-secure-login.verify-account.xyz/update">a fake PayPal link</button>
+
+        <div id="error-panel" class="error-panel hidden"></div>
+
+        <div id="result" class="result-panel hidden">
+          <div class="verdict-row">
+            <div id="verdict-badge" class="verdict-badge"><span id="verdict-icon">?</span></div>
+            <div class="verdict-text">
+              <div id="verdict-label" class="verdict-label"></div>
+              <div id="verdict-url" class="verdict-url"></div>
+            </div>
+            <div class="confidence-block">
+              <div id="confidence-num" class="confidence-num">--%</div>
+              <div class="confidence-cap">confidence</div>
+            </div>
+          </div>
+          <div class="gauge-track"><div id="gauge-fill" class="gauge-fill"></div></div>
+          <div class="gauge-labels"><span>legitimate</span><span>phishing</span></div>
+          <div class="signals-block">
+            <div class="signals-title">Signals detected</div>
+            <ul id="signals-list" class="signals-list"></ul>
+          </div>
+          <details class="feature-details">
+            <summary>Raw extracted features (model input)</summary>
+            <div id="feature-grid" class="feature-grid"></div>
+          </details>
         </div>
       </div>
 
-      <div id="error-panel" class="error-panel hidden"></div>
+      <ul class="trust">
+        <li>No page is opened</li>
+        <li>Result in a second</li>
+        <li>Free to use</li>
+      </ul>
+    </section>
 
-      <div id="result" class="result-panel hidden">
-        <div class="verdict-row">
-          <div id="verdict-badge" class="verdict-badge"><span id="verdict-icon">?</span></div>
-          <div class="verdict-text">
-            <div id="verdict-label" class="verdict-label"></div>
-            <div id="verdict-url" class="verdict-url"></div>
-          </div>
-          <div class="confidence-block">
-            <div id="confidence-num" class="confidence-num">--%</div>
-            <div class="confidence-cap">confidence</div>
-          </div>
-        </div>
-
-        <div class="gauge-track"><div id="gauge-fill" class="gauge-fill"></div></div>
-        <div class="gauge-labels"><span>legitimate</span><span>phishing</span></div>
-
-        <div class="signals-block">
-          <div class="signals-title">Signals detected</div>
-          <ul id="signals-list" class="signals-list"></ul>
-        </div>
-
-        <details class="feature-details">
-          <summary>Raw extracted features (model input)</summary>
-          <div id="feature-grid" class="feature-grid"></div>
-        </details>
+    <!-- HOW IT WORKS -->
+    <section id="how" class="section container">
+      <p class="eyebrow">How it works</p>
+      <h2>Four steps, about one second</h2>
+      <div class="card-grid four">
+        <article class="card"><span class="num">01</span><h3>Paste a link</h3><p>PhishGuard reads only the text of the address. It never visits the page.</p></article>
+        <article class="card"><span class="num">02</span><h3>Measure it</h3><p>19 signals are checked: length, dots, hyphens, raw IPs, the @ symbol and risky words.</p></article>
+        <article class="card"><span class="num">03</span><h3>Score it</h3><p>A trained Random Forest model gives a phishing probability from 0 to 100%.</p></article>
+        <article class="card"><span class="num">04</span><h3>See why</h3><p>You get the list of signals behind the verdict, so you can judge for yourself.</p></article>
       </div>
     </section>
 
     <!-- ABOUT -->
-    <section id="about" class="section">
-      <h2>About PhishGuard</h2>
-      <p>PhishGuard checks a web link and tells you whether it looks like a phishing attempt or a normal site. Phishing links imitate banks, shops and login pages to steal passwords and card details.</p>
-      <p>It is a student prototype. It gives you a quick second opinion, and it does not replace your own judgment or your browser's built-in protection.</p>
+    <section id="about" class="section container">
+      <p class="eyebrow">About</p>
+      <h2>A quick second opinion on suspicious links</h2>
+      <p class="sub">Phishing links imitate banks, shops and login pages to steal passwords and card details. PhishGuard is a student prototype trained on a large set of real phishing and legitimate links. It helps you decide, but it does not replace your own judgment or your browser's built-in protection.</p>
       <div class="stat-row">
-        <div><strong>19</strong><span>URL features checked</span></div>
-        <div><strong>Random Forest</strong><span>classifier used</span></div>
-        <div><strong>0</strong><span>pages visited or stored</span></div>
+        <div class="stat"><strong>19</strong><span>URL signals checked</span></div>
+        <div class="stat"><strong>235k</strong><span>real links used for training</span></div>
+        <div class="stat"><strong>0</strong><span>pages opened</span></div>
       </div>
     </section>
 
-    <!-- HOW IT WORKS -->
-    <section id="how" class="section">
-      <h2>How it works</h2>
-      <ol class="steps">
-        <li><h3>You paste a link</h3><p>PhishGuard only reads the text of the URL. It never opens the page.</p></li>
-        <li><h3>It measures the link</h3><p>The app extracts 19 signals, such as URL length, number of dots and hyphens, raw IP addresses, the @ symbol, and suspicious words like "login" or "verify".</p></li>
-        <li><h3>The model scores it</h3><p>A Random Forest model, trained on a generated sample dataset, returns a phishing probability from 0 to 100%.</p></li>
-        <li><h3>You see the reasons</h3><p>The result lists the signals that raised or lowered the score, so you can judge for yourself.</p></li>
-      </ol>
+    <!-- RED FLAGS -->
+    <section id="tips" class="section container">
+      <p class="eyebrow">Stay safe</p>
+      <h2>Spot a phishing link yourself</h2>
+      <div class="card-grid three">
+        <article class="card"><h3>Look-alike names</h3><p><code>paypa1.com</code> is not <code>paypal.com</code>. Check every letter of the domain.</p></article>
+        <article class="card"><h3>Numbers instead of a name</h3><p>Links like <code>http://192.168.1.5/login</code> hide who really owns the page.</p></article>
+        <article class="card"><h3>The @ trick</h3><p>Anything before an <code>@</code> is ignored by the browser and is often used to disguise the real site.</p></article>
+        <article class="card"><h3>Pressure and urgency</h3><p>Real banks never ask for your password or OTP through a link in a message.</p></article>
+        <article class="card"><h3>Odd endings</h3><p>Free or rarely used endings such as <code>.xyz</code>, <code>.top</code> or <code>.tk</code> deserve extra care.</p></article>
+        <article class="card"><h3>When unsure</h3><p>Type the site's address yourself instead of clicking the link.</p></article>
+      </div>
     </section>
 
     <!-- FAQ -->
-    <section id="faq" class="section">
-      <h2>FAQ and safety tips</h2>
-
-      <details class="faq-item">
-        <summary>How accurate is it?</summary>
-        <p>It is a prototype trained on a small generated dataset, so it will make mistakes. A "legitimate" result does not guarantee a link is safe.</p>
-      </details>
-      <details class="faq-item">
-        <summary>Do you store the links I scan?</summary>
-        <p>No. The link is analyzed when you press Scan and the result is shown to you. The app does not save it.</p>
-      </details>
-      <details class="faq-item">
-        <summary>What should I do if a link is flagged?</summary>
-        <p>Do not open it and do not enter any details. If it came in a message, delete it and report it as phishing in your email or messaging app.</p>
-      </details>
-
-      <h3 class="tips-title">Spot a phishing link yourself</h3>
-      <ul class="tips">
-        <li>Check the domain name carefully. <code>paypa1.com</code> is not <code>paypal.com</code>.</li>
-        <li>Be wary of links that use an IP address, like <code>http://192.168.1.5/login</code>.</li>
-        <li>Anything before an <code>@</code> in a link is ignored by the browser and is often used to hide the real site.</li>
-        <li>A real bank never asks for your password or OTP through a link in a message.</li>
-        <li>When unsure, type the site's address yourself instead of clicking.</li>
-      </ul>
+    <section id="faq" class="section container narrow">
+      <p class="eyebrow">FAQ</p>
+      <h2>Common questions</h2>
+      <details class="faq-item"><summary>How accurate is it?</summary><p>It is a prototype. It judges mainly the website address, so it can still make mistakes. A "legitimate" result is not a guarantee that a link is safe.</p></details>
+      <details class="faq-item"><summary>Does it open the link I paste?</summary><p>No. PhishGuard only analyzes the text of the address and never visits the page.</p></details>
+      <details class="faq-item"><summary>What should I do if a link is flagged?</summary><p>Do not open it and do not enter any details. If it came in a message, delete it and report it as phishing in your email or messaging app.</p></details>
+      <details class="faq-item"><summary>Can a phishing page still look safe to it?</summary><p>Yes. A fake page hosted on a trusted site can slip through, because the address itself looks normal. Always combine the result with your own care.</p></details>
     </section>
 
     <!-- CONTACT -->
-    <section id="contact" class="section">
-      <h2>Contact us</h2>
-      <p>Found a wrong result or have a suggestion? Send a message and your email app will open with it ready to send.</p>
-
+    <section id="contact" class="section container narrow">
+      <p class="eyebrow">Contact</p>
+      <h2>Found a wrong result? Tell us.</h2>
+      <p class="sub">Send a message and your email app will open with it ready to send.</p>
       <form id="contact-form" class="contact-form" novalidate>
-        <label for="c-name">Your name</label>
-        <input id="c-name" type="text" autocomplete="name" required>
-
-        <label for="c-email">Your email</label>
-        <input id="c-email" type="email" autocomplete="email" required>
-
+        <div class="two-col">
+          <div><label for="c-name">Your name</label><input id="c-name" type="text" autocomplete="name" required></div>
+          <div><label for="c-email">Your email</label><input id="c-email" type="email" autocomplete="email" required></div>
+        </div>
         <label for="c-msg">Message</label>
         <textarea id="c-msg" rows="5" required></textarea>
-
         <button type="submit" class="btn">Send message</button>
         <p id="c-status" class="form-status" role="status"></p>
       </form>
     </section>
-
-    <p class="foot-note">
-      Trained on a locally generated synthetic dataset · RandomForest classifier · 19 lexical/structural URL features · runs fully offline, no data leaves this machine.
-    </p>
   </main>
+
+  <footer class="site-footer">
+    <div class="container foot-inner">
+      <span class="brand"><span class="brand-mark">◈</span><span class="brand-name">PhishGuard</span></span>
+      <span class="foot-text">Prototype · results are a second opinion, not a guarantee.</span>
+      <a class="foot-top" href="#home">Back to top ↑</a>
+    </div>
+  </footer>
 
   <script src="{{ url_for('static', filename='app.js') }}"></script>
   <script>
-    // Contact form: opens the visitor's email app with the message filled in.
     // Replace this address with your own email.
     var CONTACT_EMAIL = "retreater1700@gmail.com";
 
@@ -164,17 +170,14 @@
       var email = document.getElementById('c-email').value.trim();
       var msg = document.getElementById('c-msg').value.trim();
       var status = document.getElementById('c-status');
-
       if (!name || !email || !msg) {
         status.textContent = 'Please fill in your name, email and message.';
         status.className = 'form-status err';
         return;
       }
-      var subject = 'PhishGuard message from ' + name;
-      var body = msg + '\n\n— ' + name + ' (' + email + ')';
       window.location.href = 'mailto:' + CONTACT_EMAIL +
-        '?subject=' + encodeURIComponent(subject) +
-        '&body=' + encodeURIComponent(body);
+        '?subject=' + encodeURIComponent('PhishGuard message from ' + name) +
+        '&body=' + encodeURIComponent(msg + '\n\n— ' + name + ' (' + email + ')');
       status.textContent = 'Opening your email app. Press send there to finish.';
       status.className = 'form-status ok';
     });
