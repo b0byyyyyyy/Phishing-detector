@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Free &amp; Legal Streaming Hub – PhishGuard</title>
+  <meta name="description" content="Free, legal ways to watch movies, shows and anime without another subscription, plus how to spot fake streaming sites.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="extra.css">
+</head>
+<body>
+  <div class="scanline"></div>
+
+  <header class="site-nav">
+    <div class="nav-inner">
+      <a class="brand" href="/"><span class="brand-mark">◈</span><span class="brand-name">PhishGuard</span></a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="/">Scanner</a>
+        <a href="#problem">The problem</a>
+        <a href="#services">Free services</a>
+        <a href="#safe">Stay safe</a>
+      </nav>
+      <a class="nav-cta" href="#safe">Check a link</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <span class="pill"><i></i> Free &amp; legal streaming hub</span>
+      <h1>Why pay for five subscriptions when great content is <span class="grad">free</span>?</h1>
+      <p class="lead">Plenty of movies, shows and anime are free and legal to watch. Here are trusted places to find them, and how to avoid the fake "free" sites that put your device at risk.</p>
+    </section>
+
+    <!-- PROBLEM -->
+    <section id="problem" class="section container">
+      <p class="eyebrow">The problem</p>
+      <h2>Streaming got expensive and scattered</h2>
+      <div class="card-grid three">
+        <article class="card"><h3>Subscription fatigue</h3><p>Each service wants its own monthly fee. Add a few together and the bill rivals the old cable package.</p></article>
+        <article class="card"><h3>Content split across apps</h3><p>The show you want is always on the one service you don't have, so people keep signing up and cancelling.</p></article>
+        <article class="card"><h3>"Free" sites that cost you</h3><p>Unofficial streaming sites push fake download buttons, pop-ups and redirects that lead to malware and stolen passwords.</p></article>
+      </div>
+      <p class="sub" style="margin-top:22px">The fix: use official free services. They are supported by ads or by your library, they are legal, and they don't put your device at risk.</p>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="section container">
+      <p class="eyebrow">Free services</p>
+      <h2>Where to watch for free, legally</h2>
+      <p class="notice">Availability and catalogs change by country and over time. Check each service in your region before relying on it.</p>
+      <div class="card-grid three">
+        <article class="card svc">
+          <div class="tags"><span class="tag good">No ads</span><span class="tag">Classic films</span></div>
+          <h3>Internet Archive</h3>
+          <p>A huge free library of public-domain films, old TV, cartoons and documentaries run by a non-profit.</p>
+          <a class="btn-outline" href="https://archive.org" target="_blank" rel="noopener noreferrer">Visit site</a>
+        </article>
+        <article class="card svc">
+          <div class="tags"><span class="tag warn">With ads</span><span class="tag">Movies &amp; shows</span></div>
+          <h3>YouTube</h3>
+          <p>Many studios, labels and broadcasters upload full movies and episodes to their official channels, free with ads.</p>
+          <a class="btn-outline" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">Visit site</a>
+        </article>
+        <article class="card svc">
+          <div class="tags"><span class="tag warn">With ads</span><span class="tag">Movies &amp; shows</span></div>
+          <h3>Tubi</h3>
+          <p>A free ad-supported service with a large catalog of films and series. Availability depends on your country.</p>
+          <a class="btn-outline" href="https://tubitv.com" target="_blank" rel="noopener noreferrer">Visit site</a>
+        </article>
+        <article class="card svc">
+          <div class="tags"><span class="tag warn">With ads</span><span class="tag">Live &amp; on-demand</span></div>
+          <h3>Pluto TV</h3>
+          <p>Free live channels and on-demand titles in a TV-guide style. Availability depends on your country.</p>
+          <a class="btn-outline" href="https://pluto.tv" target="_blank" rel="noopener noreferrer">Visit site</a>
+        </article>
+        <article class="card svc">
+          <div class="tags"><span class="tag warn">With ads</span><span class="tag">Anime</span></div>
+          <h3>RetroCrush</h3>
+          <p>Free, ad-supported classic anime from licensed distributors. Availability depends on your country.</p>
+          <a class="btn-outline" href="https://www.retrocrush.tv" target="_blank" rel="noopener noreferrer">Visit site</a>
+        </article>
+        <article class="card svc">
+          <div class="tags"><span class="tag good">No ads</span><span class="tag">Library card</span></div>
+          <h3>Kanopy</h3>
+          <p>Free films and documentaries through a participating public library or university. Needs a library membership.</p>
+          <a class="btn-outline" href="https://www.kanopy.com" target="_blank" rel="noopener noreferrer">Visit site</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- SAFETY + SCANNER -->
+    <section id="safe" class="section container">
+      <p class="eyebrow">Stay safe</p>
+      <h2>Check before you stream</h2>
+      <p class="sub">Spotted a link to a site you don't know? Paste it below. PhishGuard checks the link for warning signs. It can't confirm what a site does once it's open, so treat any result as a second opinion.</p>
+
+      <div class="hero-card" id="scan" style="margin-top:26px">
+        <div class="scan-panel">
+          <label class="scan-label" for="url-input">enter a url to analyze</label>
+          <div class="scan-row">
+            <span class="prompt-caret">&gt;</span>
+            <input id="url-input" type="text" placeholder="https://example.com" autocomplete="off" spellcheck="false">
+            <button id="scan-btn" type="button">Scan</button>
+          </div>
+        </div>
+        <div id="error-panel" class="error-panel hidden"></div>
+        <div id="result" class="result-panel hidden">
+          <div class="verdict-row">
+            <div id="verdict-badge" class="verdict-badge"><span id="verdict-icon">?</span></div>
+            <div class="verdict-text">
+              <div id="verdict-label" class="verdict-label"></div>
+              <div id="verdict-url" class="verdict-url"></div>
+            </div>
+            <div class="confidence-block">
+              <div id="confidence-num" class="confidence-num">--%</div>
+              <div class="confidence-cap">confidence</div>
+            </div>
+          </div>
+          <div class="gauge-track"><div id="gauge-fill" class="gauge-fill"></div></div>
+          <div class="gauge-labels"><span>legitimate</span><span>phishing</span></div>
+          <div class="signals-block">
+            <div class="signals-title">Signals detected</div>
+            <ul id="signals-list" class="signals-list"></ul>
+          </div>
+          <details class="feature-details">
+            <summary>Raw extracted features (model input)</summary>
+            <div id="feature-grid" class="feature-grid"></div>
+          </details>
+        </div>
+      </div>
+
+      <div class="card-grid four">
+        <article class="card"><h3>Fake download buttons</h3><p>Big "Play" or "Download" buttons that open new tabs are a classic trap.</p></article>
+        <article class="card"><h3>Forced installs</h3><p>No real streaming site needs you to install an app or extension just to watch.</p></article>
+        <article class="card"><h3>Password prompts</h3><p>Never log in with your Google or Apple account on a site you don't recognize.</p></article>
+        <article class="card"><h3>Use official apps</h3><p>When in doubt, get the service from your phone's official app store.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container foot-inner">
+      <span class="brand"><span class="brand-mark">◈</span><span class="brand-name">PhishGuard</span></span>
+      <span class="foot-text">Listings are for information only and are not endorsements. Check availability in your country.</span>
+      <a class="foot-top" href="/">← Back to scanner</a>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
