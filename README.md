@@ -8,7 +8,7 @@ API keys or external services required.
 
 ## How it works
 
-1. **`feature_extractor.py`** — turns any URL into 19 numeric/binary
+1. **`feature_extractor.py`** — turns any URL into 20 numeric/binary
    features (length, use of an IP address, suspicious keywords,
    suspicious top-level domains, hyphen count, HTTPS usage, etc.),
    without needing to visit the URL.
