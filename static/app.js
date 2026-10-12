@@ -55,17 +55,23 @@ async function runScan() {
 }
 
 function renderResult(data) {
-  const isPhishing = data.prediction === 'phishing';
+  const level = data.prediction; // 'phishing' | 'caution' | 'legitimate'
+  const isPhishing = level === 'phishing';
+  const isCaution = level === 'caution';
+  const cls = isPhishing ? 'danger' : (isCaution ? 'warn' : 'safe');
 
-  verdictBadge.className = 'verdict-badge ' + (isPhishing ? 'danger' : 'safe');
-  verdictIcon.textContent = isPhishing ? '!' : '✓';
-  verdictLabel.className = 'verdict-label ' + (isPhishing ? 'danger' : 'safe');
-  verdictLabel.textContent = isPhishing ? 'Likely phishing' : 'Looks legitimate';
+  verdictBadge.className = 'verdict-badge ' + cls;
+  verdictIcon.textContent = isPhishing ? '!' : (isCaution ? '?' : '\u2713');
+  verdictLabel.className = 'verdict-label ' + cls;
+  verdictLabel.textContent = isPhishing ? 'Likely phishing' : (isCaution ? 'Be careful' : 'Looks legitimate');
   verdictUrl.textContent = data.url;
 
-  const conf = isPhishing ? data.phishing_probability : data.legitimate_probability;
+  const showPhishScore = isPhishing || isCaution;
+  const conf = showPhishScore ? data.phishing_probability : data.legitimate_probability;
   confidenceNum.textContent = conf.toFixed(1) + '%';
-  confidenceNum.style.color = isPhishing ? 'var(--red)' : 'var(--green)';
+  confidenceNum.style.color = isPhishing ? 'var(--red)' : (isCaution ? 'var(--amber)' : 'var(--green)');
+  const cap = document.querySelector('.confidence-cap');
+  if (cap) cap.textContent = isCaution ? 'phishing score' : 'confidence';
 
   gaugeFill.style.left = data.phishing_probability + '%';
 
