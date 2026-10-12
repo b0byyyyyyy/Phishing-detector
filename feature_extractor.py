@@ -30,10 +30,9 @@ def extract_features(url: str) -> dict:
     """Return a dict of numeric/binary features for a given URL."""
     url = url.strip()
     if not re.match(r"^[a-zA-Z]+://", url):
-        # Assume http if no scheme given, so urlparse works correctly
-        parsed_url_for_parts = "http://" + url
-    else:
-        parsed_url_for_parts = url
+        # No scheme given: assume https, as browsers do today
+        url = "https://" + url
+    parsed_url_for_parts = url
 
     parsed = urlparse(parsed_url_for_parts)
     hostname = parsed.hostname or ""
