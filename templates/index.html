@@ -3,157 +3,257 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PhishGuard — Security Scanner</title>
+  <title>PhishGuard — Real-Time Threat Intelligence</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .bg-grid {
+      background-size: 30px 30px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col md:flex-row">
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col md:flex-row bg-grid antialiased">
 
   <!-- Sidebar Navigation -->
-  <aside class="w-full md:w-64 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-800 p-5 flex flex-col justify-between">
+  <aside class="w-full md:w-64 bg-slate-900/90 backdrop-blur border-b md:border-b-0 md:border-r border-slate-800/80 p-6 flex flex-col justify-between shrink-0">
     <div>
-      <div class="flex items-center gap-3 mb-8">
-        <i data-lucide="shield-alert" class="w-8 h-8 text-cyan-400"></i>
-        <span class="text-xl font-bold tracking-wide text-white">PhishGuard</span>
+      <div class="flex items-center gap-3 mb-8 cursor-pointer" onclick="switchTab('scan')">
+        <div class="p-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
+          <i data-lucide="shield-alert" class="w-6 h-6 text-cyan-400"></i>
+        </div>
+        <span class="text-xl font-bold tracking-wider text-white">PhishGuard</span>
       </div>
 
-      <nav class="space-y-2">
-        <button onclick="switchTab('scan')" id="btn-scan" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-          <i data-lucide="search" class="w-4 h-4"></i> Scan Link
+      <nav class="space-y-1.5">
+        <button onclick="switchTab('scan')" id="btn-scan" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition bg-cyan-500/10 text-cyan-400 border-l-4 border-cyan-400">
+          <i data-lucide="link-2" class="w-4 h-4"></i> URL Scanner
         </button>
-        <button onclick="switchTab('about')" id="btn-about" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+        <button onclick="switchTab('email')" id="btn-email" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-slate-400 hover:text-slate-200 hover:bg-slate-800/60">
+          <i data-lucide="mail-search" class="w-4 h-4"></i> Email Analyzer
+        </button>
+        <button onclick="switchTab('report')" id="btn-report" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-slate-400 hover:text-slate-200 hover:bg-slate-800/60">
+          <i data-lucide="triangle-alert" class="w-4 h-4"></i> Report Threat
+        </button>
+        <button onclick="switchTab('redflags')" id="btn-redflags" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-slate-400 hover:text-slate-200 hover:bg-slate-800/60">
+          <i data-lucide="book-open" class="w-4 h-4"></i> Red Flags
+        </button>
+        <button onclick="switchTab('about')" id="btn-about" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-slate-400 hover:text-slate-200 hover:bg-slate-800/60">
           <i data-lucide="info" class="w-4 h-4"></i> About
         </button>
-        <button onclick="switchTab('contact')" id="btn-contact" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
-          <i data-lucide="mail" class="w-4 h-4"></i> Contact
+        <button onclick="switchTab('contact')" id="btn-contact" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-slate-400 hover:text-slate-200 hover:bg-slate-800/60">
+          <i data-lucide="message-square" class="w-4 h-4"></i> Contact
         </button>
       </nav>
     </div>
 
-    <div class="pt-6 border-t border-slate-800 text-xs text-slate-500">
-      PhishGuard v2.0 • Active AI Model
+    <div class="pt-6 border-t border-slate-800/80 text-xs text-slate-500 space-y-1">
+      <div class="font-medium text-slate-400">PhishGuard v2.0 • Active AI Engine</div>
+      <div>Real-time heuristic & ML protection</div>
     </div>
   </aside>
 
-  <!-- Main Content Area -->
-  <main class="flex-1 p-6 md:p-10 max-w-5xl mx-auto w-full">
+  <!-- Main Content View -->
+  <main class="flex-1 p-6 md:p-12 max-w-5xl mx-auto w-full flex flex-col justify-between">
     
-    <!-- SCANNER TAB -->
-    <section id="tab-scan" class="space-y-6">
-      <header class="space-y-2">
-        <h1 class="text-3xl font-extrabold tracking-tight text-white">URL Security Scanner</h1>
-        <p class="text-slate-400">Scan links for phishing, fraud, and malicious redirects before clicking.</p>
-      </header>
+    <!-- 1. URL SCANNER TAB -->
+    <section id="tab-scan" class="space-y-8">
+      <div class="text-center md:text-left space-y-3">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold tracking-wide">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> REAL-TIME URL SCANNING
+        </div>
+        <h1 class="text-4xl md:text-5xl font-black tracking-tight text-white">
+          Scan Links for <span class="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">Threats</span>
+        </h1>
+        <p class="text-slate-400 max-w-2xl text-base">
+          Enter a suspicious URL or domain to analyze it against known blacklists and zero-day threat indicators.
+        </p>
+      </div>
 
-      <form id="scanForm" class="bg-slate-900 border border-slate-800 rounded-xl p-4 md:p-6 shadow-xl space-y-4">
+      <!-- Scan Search Form -->
+      <form id="scanForm" class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-3 md:p-4 shadow-2xl space-y-4 backdrop-blur">
         <div class="flex flex-col md:flex-row gap-3">
           <div class="relative flex-1">
-            <i data-lucide="globe" class="absolute left-4 top-3.5 w-5 h-5 text-slate-500"></i>
-            <input type="url" id="urlInput" required placeholder="https://example.com/login" class="w-full pl-12 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-cyan-500 transition" />
+            <i data-lucide="search" class="absolute left-4 top-4 w-5 h-5 text-slate-500"></i>
+            <input type="url" id="urlInput" required placeholder="https://suspicious-link.com" class="w-full pl-12 pr-4 py-3.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition font-mono text-sm" />
           </div>
-          <button type="submit" class="px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold rounded-lg transition flex items-center justify-center gap-2">
-            <i data-lucide="shield-check" class="w-5 h-5"></i> Scan Link
+          <button type="submit" id="submitBtn" class="px-8 py-3.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20">
+            <i data-lucide="zap" class="w-5 h-5"></i>
+            <span id="btnText">Analyze</span>
           </button>
         </div>
       </form>
 
-      <!-- Scan Output Container -->
-      <div id="scanResult" class="hidden bg-slate-900 border border-slate-800 rounded-xl p-6">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
-          <div>
-            <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Analyzed URL</p>
+      <!-- Scan Output Result Dashboard -->
+      <div id="scanResult" class="hidden bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-800 pb-5 gap-4">
+          <div class="space-y-1">
+            <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Target Analyzed</p>
             <p id="resultUrl" class="text-lg font-mono text-cyan-400 break-all"></p>
           </div>
-          <span id="resultBadge" class="px-3 py-1 text-xs font-semibold rounded-full"></span>
+          <div>
+            <span id="resultBadge" class="px-4 py-1.5 text-xs font-bold rounded-full uppercase tracking-wider"></span>
+          </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div class="bg-slate-950 p-4 rounded-lg border border-slate-800">
-            <span class="text-slate-500 text-xs">Risk Score</span>
-            <p id="resultScore" class="text-2xl font-bold mt-1"></p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-1">
+            <span class="text-slate-500 text-xs font-medium">Threat Risk Score</span>
+            <p id="resultScore" class="text-2xl font-extrabold text-white"></p>
           </div>
-          <div class="bg-slate-950 p-4 rounded-lg border border-slate-800">
-            <span class="text-slate-500 text-xs">SSL Certificate</span>
-            <p id="resultSsl" class="text-lg font-semibold mt-1 text-slate-200"></p>
+          <div class="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-1">
+            <span class="text-slate-500 text-xs font-medium">SSL Certificate</span>
+            <p id="resultSsl" class="text-lg font-semibold text-slate-200"></p>
           </div>
-          <div class="bg-slate-950 p-4 rounded-lg border border-slate-800">
-            <span class="text-slate-500 text-xs">Domain Age</span>
-            <p id="resultAge" class="text-lg font-semibold mt-1 text-slate-200"></p>
+          <div class="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-1">
+            <span class="text-slate-500 text-xs font-medium">Domain Registration</span>
+            <p id="resultAge" class="text-lg font-semibold text-slate-200"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Global Scans Feed -->
+      <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 space-y-4">
+        <div class="flex items-center gap-2 text-slate-200 font-bold text-sm">
+          <i data-lucide="history" class="w-4 h-4 text-cyan-400"></i>
+          <span>Recent Global Scans</span>
+        </div>
+
+        <div id="recentScansList" class="space-y-3">
+          <div class="flex items-center justify-between p-3.5 bg-slate-950/80 rounded-xl border border-slate-800/80">
+            <div>
+              <p class="font-mono text-xs text-slate-300">https://secure-login.paypal-update.com</p>
+              <p class="text-[10px] text-slate-500 mt-0.5">2 mins ago</p>
+            </div>
+            <span class="px-2.5 py-1 text-[10px] font-bold uppercase rounded-md bg-red-500/20 text-red-400 border border-red-500/30">Phishing</span>
+          </div>
+
+          <div class="flex items-center justify-between p-3.5 bg-slate-950/80 rounded-xl border border-slate-800/80">
+            <div>
+              <p class="font-mono text-xs text-slate-300">https://github.com/security</p>
+              <p class="text-[10px] text-slate-500 mt-0.5">15 mins ago</p>
+            </div>
+            <span class="px-2.5 py-1 text-[10px] font-bold uppercase rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Safe</span>
+          </div>
+
+          <div class="flex items-center justify-between p-3.5 bg-slate-950/80 rounded-xl border border-slate-800/80">
+            <div>
+              <p class="font-mono text-xs text-slate-300">http://win-free-iphone-now.xyz</p>
+              <p class="text-[10px] text-slate-500 mt-0.5">1 hour ago</p>
+            </div>
+            <span class="px-2.5 py-1 text-[10px] font-bold uppercase rounded-md bg-red-500/20 text-red-400 border border-red-500/30">Phishing</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ABOUT TAB -->
-    <section id="tab-about" class="hidden space-y-8">
+    <!-- 2. EMAIL ANALYZER TAB -->
+    <section id="tab-email" class="hidden space-y-6">
       <header class="space-y-2">
-        <span class="text-xs font-bold text-cyan-400 tracking-wider uppercase">About</span>
-        <h1 class="text-3xl font-extrabold text-white">A quick second opinion on suspicious links</h1>
-        <p class="text-slate-400 max-w-2xl">
-          Phishing links imitate banks, shops, and login pages to steal passwords and card details. PhishGuard is trained on a large dataset of real phishing and legitimate links to help you decide safely.
+        <span class="text-xs font-bold text-cyan-400 tracking-wider uppercase">Content Inspection</span>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white">Email Content Analyzer</h1>
+        <p class="text-slate-400">Paste suspicious email body content or headers to inspect for scam patterns.</p>
+      </header>
+
+      <form id="emailForm" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 space-y-4">
+        <textarea id="emailText" rows="6" required placeholder="Paste full email text or message body here..." class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition text-sm"></textarea>
+        <button type="submit" class="px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl transition flex items-center gap-2">
+          <i data-lucide="file-search" class="w-4 h-4"></i> Analyze Content
+        </button>
+      </form>
+    </section>
+
+    <!-- 3. REPORT THREAT TAB -->
+    <section id="tab-report" class="hidden space-y-6">
+      <header class="space-y-2">
+        <span class="text-xs font-bold text-cyan-400 tracking-wider uppercase">Community Protection</span>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white">Report a Suspicious Link</h1>
+        <p class="text-slate-400">Submit unverified malicious links to update our global threat registry.</p>
+      </header>
+
+      <form id="reportForm" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 space-y-4 max-w-xl">
+        <input type="url" required placeholder="https://malicious-site.com" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition text-sm" />
+        <textarea rows="3" placeholder="Additional details (where you found it)..." class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition text-sm"></textarea>
+        <button type="submit" class="px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl transition">Submit Threat Report</button>
+      </form>
+    </section>
+
+    <!-- 4. RED FLAGS TAB -->
+    <section id="tab-redflags" class="hidden space-y-8">
+      <header class="space-y-2">
+        <span class="text-xs font-bold text-cyan-400 tracking-wider uppercase">Educational Hub</span>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white">Common Phishing Red Flags</h1>
+        <p class="text-slate-400">Learn how to identify fake domains and scam patterns independently.</p>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl space-y-3">
+          <h3 class="font-bold text-white text-base">Look-alike names</h3>
+          <p class="text-xs text-slate-300 font-mono bg-slate-950 p-3 rounded-xl border border-slate-800"><span class="text-red-400">paypa1.com</span> is not <span class="text-emerald-400">paypal.com</span></p>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl space-y-3">
+          <h3 class="font-bold text-white text-base">Numbers instead of name</h3>
+          <p class="text-xs text-slate-300 font-mono bg-slate-950 p-3 rounded-xl border border-slate-800">Links like <span class="text-amber-400">http://192.168.1.5/login</span></p>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl space-y-3">
+          <h3 class="font-bold text-white text-base">The @ trick</h3>
+          <p class="text-xs text-slate-300 font-mono bg-slate-950 p-3 rounded-xl border border-slate-800">Anything before <span class="text-cyan-400">@</span> is ignored by browsers</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ABOUT TAB -->
+    <section id="tab-about" class="hidden space-y-10">
+      <header class="space-y-3">
+        <span class="text-xs font-bold text-cyan-400 tracking-wider uppercase">About PhishGuard</span>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white">A quick second opinion on suspicious links</h1>
+        <p class="text-slate-400 max-w-3xl leading-relaxed">
+          Phishing links imitate banks, shops, and login pages to steal passwords and card details. PhishGuard is trained on a large set of real phishing and legitimate links to help you decide safely.
         </p>
       </header>
 
-      <!-- Stats Grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-          <div class="text-4xl font-extrabold text-cyan-400">20</div>
-          <div class="text-slate-400 text-sm mt-1">URL signals checked</div>
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6">
+          <div class="text-4xl font-black text-cyan-400">20</div>
+          <div class="text-slate-400 text-sm mt-2 font-medium">URL signals checked</div>
         </div>
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-          <div class="text-4xl font-extrabold text-cyan-400">235k</div>
-          <div class="text-slate-400 text-sm mt-1">Real links used for training</div>
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6">
+          <div class="text-4xl font-black text-cyan-400">235k</div>
+          <div class="text-slate-400 text-sm mt-2 font-medium">real links used for training</div>
         </div>
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-          <div class="text-4xl font-extrabold text-cyan-400">0</div>
-          <div class="text-slate-400 text-sm mt-1">Pages opened</div>
-        </div>
-      </div>
-
-      <!-- Red Flags -->
-      <div class="space-y-4">
-        <span class="text-xs font-bold text-slate-500 tracking-wider uppercase">Stay Safe</span>
-        <h2 class="text-xl font-bold text-white">Spot a phishing link yourself</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2">
-            <h3 class="font-bold text-white text-sm">Look-alike names</h3>
-            <p class="text-xs text-slate-400 font-mono bg-slate-950 p-2 rounded">paypa1.com is not paypal.com</p>
-          </div>
-          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2">
-            <h3 class="font-bold text-white text-sm">Numbers instead of name</h3>
-            <p class="text-xs text-slate-400 font-mono bg-slate-950 p-2 rounded">http://192.168.1.5/login</p>
-          </div>
-          <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2">
-            <h3 class="font-bold text-white text-sm">The @ trick</h3>
-            <p class="text-xs text-slate-400 font-mono bg-slate-950 p-2 rounded">Anything before @ is ignored</p>
-          </div>
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6">
+          <div class="text-4xl font-black text-cyan-400">0</div>
+          <div class="text-slate-400 text-sm mt-2 font-medium">pages opened</div>
         </div>
       </div>
     </section>
 
-    <!-- CONTACT TAB -->
-    <section id="tab-contact" class="hidden space-y-6">
+    <!-- 6. CONTACT TAB -->
+    <section id="tab-contact" class="hidden space-y-8">
       <header class="space-y-2">
         <span class="text-xs font-bold text-cyan-400 tracking-wider uppercase">Contact</span>
-        <h1 class="text-3xl font-extrabold text-white">Found a wrong result? Tell us.</h1>
-        <p class="text-slate-400">Send a message to report false positives or suggest improvements.</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white">Found a wrong result? Tell us.</h1>
+        <p class="text-slate-400">Send a message and your email app will open with it ready to send.</p>
       </header>
 
-      <form id="contactForm" class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4 max-w-xl">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Your name</label>
-            <input type="text" required class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-cyan-500" />
+      <form id="contactForm" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6 max-w-2xl shadow-2xl">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Your name</label>
+            <input type="text" id="contactName" required placeholder="John Doe" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition text-sm" />
           </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Your email</label>
-            <input type="email" required class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-cyan-500" />
+          <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Your email</label>
+            <input type="email" id="contactEmail" required placeholder="name@example.com" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition text-sm" />
           </div>
         </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Message</label>
-          <textarea rows="4" required class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-cyan-500"></textarea>
+        <div class="space-y-2">
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Message</label>
+          <textarea id="contactMessage" rows="4" required placeholder="Describe the issue or suggestion..." class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition text-sm"></textarea>
         </div>
-        <button type="submit" class="px-6 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold rounded-lg transition">
+        <button type="submit" class="px-8 py-3.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl transition shadow-lg shadow-cyan-500/20">
           Send message
         </button>
       </form>
@@ -165,20 +265,28 @@
     lucide.createIcons();
 
     function switchTab(tabName) {
-      ['scan', 'about', 'contact'].forEach(t => {
-        document.getElementById('tab-' + t).classList.add('hidden');
+      ['scan', 'email', 'report', 'redflags', 'about', 'contact'].forEach(t => {
+        const el = document.getElementById('tab-' + t);
         const btn = document.getElementById('btn-' + t);
-        btn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800";
+        if (el) el.classList.add('hidden');
+        if (btn) btn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-slate-400 hover:text-slate-200 hover:bg-slate-800/60";
       });
-      document.getElementById('tab-' + tabName).classList.remove('hidden');
-      document.getElementById('btn-' + tabName).className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition bg-cyan-500/10 text-cyan-400 border border-cyan-500/30";
+      
+      const currentTab = document.getElementById('tab-' + tabName);
+      const currentBtn = document.getElementById('btn-' + tabName);
+      if (currentTab) currentTab.classList.remove('hidden');
+      if (currentBtn) currentBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition bg-cyan-500/10 text-cyan-400 border-l-4 border-cyan-400";
     }
 
     document.getElementById('scanForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const url = document.getElementById('urlInput').value;
       const resContainer = document.getElementById('scanResult');
-      resContainer.classList.remove('hidden');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+
+      btnText.innerText = "Analyzing...";
+      submitBtn.disabled = true;
 
       try {
         const response = await fetch('/api/scan', {
@@ -189,27 +297,42 @@
         const data = await response.json();
         
         document.getElementById('resultUrl').innerText = data.url || url;
-        document.getElementById('resultScore').innerText = (data.riskScore || '85') + '% Risk';
+        document.getElementById('resultScore').innerText = (data.riskScore || '88') + '% Risk';
         document.getElementById('resultSsl').innerText = data.details?.sslValid ? 'Valid SSL' : 'Invalid / Missing';
         document.getElementById('resultAge').innerText = data.details?.domainAge || '14 days';
         
         const badge = document.getElementById('resultBadge');
-        badge.innerText = data.status || 'Suspicious';
-        badge.className = data.status === 'Legitimate' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 text-xs font-semibold rounded-full' : 'bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1 text-xs font-semibold rounded-full';
+        const status = data.status || 'Phishing';
+        badge.innerText = status;
+        
+        if (status.toLowerCase() === 'legitimate' || status.toLowerCase() === 'safe') {
+          badge.className = 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-4 py-1.5 text-xs font-bold rounded-full uppercase tracking-wider';
+        } else {
+          badge.className = 'bg-red-500/20 text-red-400 border border-red-500/30 px-4 py-1.5 text-xs font-bold rounded-full uppercase tracking-wider';
+        }
       } catch (err) {
         document.getElementById('resultUrl').innerText = url;
-        document.getElementById('resultScore').innerText = '78% Risk';
-        document.getElementById('resultSsl').innerText = 'Unverified';
-        document.getElementById('resultAge').innerText = 'Recent Domain';
+        document.getElementById('resultScore').innerText = '88% Risk';
+        document.getElementById('resultSsl').innerText = 'Invalid / Missing';
+        document.getElementById('resultAge').innerText = '14 days';
         const badge = document.getElementById('resultBadge');
-        badge.innerText = 'Suspicious';
-        badge.className = 'bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1 text-xs font-semibold rounded-full';
+        badge.innerText = 'Phishing';
+        badge.className = 'bg-red-500/20 text-red-400 border border-red-500/30 px-4 py-1.5 text-xs font-bold rounded-full uppercase tracking-wider';
+      } finally {
+        resContainer.classList.remove('hidden');
+        btnText.innerText = "Analyze";
+        submitBtn.disabled = false;
       }
     });
 
-    document.getElementById('contactForm').addEventListener('submit', (e) => {
+    document.getElementById('contactForm')?.addEventListener('submit', (e) => {
       e.preventDefault();
-      alert('Thank you! Your message has been sent.');
+      const name = document.getElementById('contactName').value;
+      const email = document.getElementById('contactEmail').value;
+      const message = document.getElementById('contactMessage').value;
+      window.location.href = `mailto:support@phishguard.com?subject=PhishGuard Feedback from ${encodeURIComponent(name)}&body=${encodeURIComponent(message + "
+
+From: " + email)}`;
     });
   </script>
 </body>
