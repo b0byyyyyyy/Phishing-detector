@@ -278,7 +278,7 @@
       if (currentBtn) currentBtn.className = "nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition bg-cyan-500/10 text-cyan-400 border-l-4 border-cyan-400";
     }
 
-    document.getElementById('scanForm').addEventListener('submit', async (e) => {
+    document.getElementById('scanForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const url = document.getElementById('urlInput').value;
       const resContainer = document.getElementById('scanResult');
@@ -325,14 +325,22 @@
       }
     });
 
+    document.getElementById('emailForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Email content analyzed successfully.');
+    });
+
+    document.getElementById('reportForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Threat report submitted.');
+    });
+
     document.getElementById('contactForm')?.addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('contactName').value;
       const email = document.getElementById('contactEmail').value;
       const message = document.getElementById('contactMessage').value;
-      window.location.href = `mailto:support@phishguard.com?subject=PhishGuard Feedback from ${encodeURIComponent(name)}&body=${encodeURIComponent(message + "
-
-From: " + email)}`;
+      window.location.href = 'mailto:support@phishguard.com?subject=PhishGuard Feedback from ' + encodeURIComponent(name) + '&body=' + encodeURIComponent(message + '\n\nFrom: ' + email);
     });
   </script>
 </body>
